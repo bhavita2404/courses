@@ -1,0 +1,222 @@
+Q.1 List the commands used in the game to reach the ciphertext.
+
+    Entering level 1: Go, Read, Enter, Read  
+    Enter the password -: tyRgU69diqq. 
+    Then passes and goes to level2. Entering level 2: Go, Back, Read
+
+Q.2 What cryptosystem was used in this level?
+
+    Play Fair cipher ( which is a type of block cipher )
+
+Q3 What tools and observations were used to figure out the cryptosystem? (Explain in less than 100 words)
+
+	The first thought after seeing the cipher text was to check and apply all the possible ciphers we know because just by observing the text we were not able to find out which cryptosystem will be used.
+	First we checked for Caesar cipher and tried for various shifts but later realized that none of the 26 shifts made sense to the words formed.
+	Next checked for substitution cipher. Calculated the frequency of the letters and tried searching for keywords like “Chamber”, “Cave” ,etc  but didn’t find any similarity to the standard pattern of frequency of letters which encoded a meaningful text, so simple
+	Substitution didn’t work. ( // also in the frequency analysis , many letters were having same frequency thus resulted in some ambiguity )
+
+	Then we tried Permutation Cipher. The paragraph size was 180 (after removing spaces and punctuation marks) . Checked for all the possible keys assuming b(length of the block) of various sizes (where b is taken as divisor of the paragraph size thus tried for i.e 2,3,4,5,6,9,10,12,15,18 and so on).  But couldn’t make much progress (Tried to form Chamber and Caves, but couldn’t get any other words meaningful).
+
+	Also tried for substitution and permutation cipher but it has also failed (as the individual ciphers have also failed).
+
+	But when we first used the go command in level 2 it led us to a hint . The hint had a dot and dash sequence meaning a Morse code. Using the Morse Code table, we decoded the code as “SECURITY”. Then after reading the hint, we thought that the key for the permutation cipher was "Security" but that wasn't the case. We couldn't get the desired text when we used this key on top of a substitution cipher. Then another phrase "play Fair" struck gold as we thought it might be encoding in itself a cipher whosue key was "Security". 
+	Also all the necessary conditions of Play Fair Cipher (which is also a block cipher) were being satisfied by our encrypted text.
+	1) The property that either i or j appears in cipher text, not both. 
+	2) The cipher message contains an even number of letters. (generally)
+	3) Playfair will never contain a double-letter digraph and we also had no double-letter 
+	     digraph
+	Tried applying the Play fair cipher and then we successfully decrypted the text and got the password. 
+
+
+Q5 Briefly describe the decryption algorithm used. Also, mention the plaintext you deciphered. (Use less than 250 words)
+
+	Playfair Cipher is a digraph substitution cipher, where we will decrypt and substitute all the digraphs at once.
+	There will be a corresponding key (keyword) for a playfair cipher 
+	The algorithm consists of two steps- :
+	1) First create a (5 x 5) grid of alphabets which acts as a key (key square) for decryption of 
+	  cipher text to plain text. (where all the 25 alphabets are unique and we consider either J  
+	  or Q as not a part of grid)
+	  The rows of key square are first filled with distinct letters from the keyword (in the same 
+	  order as appeared in keyword). Then the remaining letters of the alphabet set are filled in 
+	  order. (excluding either J or Q)
+
+	2) The ciphertext is split into pairs of two letters (digraphs). (ciphertext of playfair cipher 
+	  always have even number of characters) if the two letters are same then we add an X after 
+	  the first. The Rules for Decryption are:
+	 a) If both the letters are in the same column of key square then we will substitute them with 
+	  the letter above each one and if they are at the top of the column then we will go back to 
+	  the bottom letter.
+	 b)  If both the letters are in the same row then we will substitute them with left of each one 
+	  and if they are at the leftmost of row then we will go back to the rightmost position.
+	 c)  If neither of the above rules is applicable then we will form a rectangle with the two letters 
+	  at the extremes and substitute them with the letters on the horizontal opposite corner of 
+	  the rectangle.(respectively)
+	In our case we have chosen q and excluded j from the key square and our key square is -:
+	S E C U R
+	I T Y A B
+	D F G H K
+	L M N O P
+	Q V W X Z
+	 
+	cipher text - :
+	TR XYCB MH AFC MUVY EOHPTCS, AFCSS TE QCSI NTYIMS TNA AFCSC. EMRBH XAA VAFR MIUCQPUH "LMRL_CCETOT" FN HM AKUXAHK. OTA WANA OTXT FFU EISCWNAF HME BFU MCVA UGTOTRE. BM HYLF IFU UVTY ANE HBSEI QYOQM OUVSF AM EAFTE PYHYS XNSKE IFUSC.
+
+	On applying the above algorithm over cipher text we obtain the below text
+
+	BE WARY OF THE NEXT CHAMBER, THERE IS VERY LITTLE IOY THERE. SPEAK OUT XTHE PASSWORD "OPEN_SESAME"  TO GO THROUGH. MAY XYOU HAVE THE STRENGTH FOR THE NEXT CHAMBER. TO FIND THE EXIT YOU FIRST WILXL NEXED TO UTTER MAGIC WORDS THERE.
+	 
+	As our decrypted cipher text contains I then surely our plain text would have contained J which would have been replaced by I thus replace I by J and the X would have been added after the first double letter digraph thus remove X wherever needed . The final plain text is -:
+
+	BE WARY OF THE NEXT CHAMBER, THERE IS VERY LITTLE JOY THERE. SPEAK OUT THE PASSWORD "OPEN_SESAME" TO GO THROUGH. MAY YOU HAVE THE STRENGTH FOR THE NEXT CHAMBER. TO FIND THE EXIT YOU FIRST WILL NEED TO UTTER MAGIC WORDS THERE.
+	 
+	Example of decryption of our text -: 
+	TR (first digraph) as T and R are not in the same row and col they form a rectangle and substitute by opp horizontal in rectangle i.e B E
+	C S as they are in same row substitute with left ones and S being leftmost substitute with rightmost i.e E R
+
+
+Q6 What was the final command used to clear this level?
+
+	OPEN_SESAME
+
+Q7 Code
+
+	#include <bits/stdc++.h>
+	using namespace std;
+
+	char table[5][5];
+
+	pair<char, char> decode(char a, char b)
+	{
+	    int x1, y1, x2, y2;
+	    for(int i=0;i<5;i++)
+	    {
+		for(int j=0;j<5;j++)
+		{
+		    if(table[i][j]==a)
+		    {
+		        x1 = i;
+		        y1 = j;
+		    }
+		    if(table[i][j] == b)
+		    {
+		        x2 = i;
+		        y2 = j;
+		    }
+		}
+	    }
+	    if(x1 == x2)
+	    {
+		y1+=4;y2+=4;
+		y1 = y1%5;
+		y2 = y2%5;
+	    }
+	    else if(y1==y2)
+	    {
+		x1 = x1+4; x2 = x2+4;
+		x1 = x1%5;
+		x2 = x2%5;
+	    }
+	    else
+	    {
+		int t = y1;
+		y1 = y2;
+		y2 = t;
+	    }
+	    pair<char, char> res ;
+	    res.first = table[x1][y1];
+	    res.second = table[x2][y2];
+	    return res;
+	}
+
+	string decrypt(string s, string key)
+	{
+	    string s1 = "";
+	    //removing space and other punctuation characters
+	    for(char c:s)
+	    {
+		if((c>='a' && c<='z') || (c>='A' && c<='Z'))
+		{
+		    if(c=='J') s1 +='I';
+		    else s1+=c;
+		}
+	    }
+	    vector<pair<char, char>> digram;
+	    int len = s1.length();
+	    if(len%2==1) s1+='X';
+	    for(int i=0;i<len;i++)
+	    {
+		char c1 = s1[i];
+		char c2 = s1[i+1];
+		if(c1==c2)
+		{
+		    c2='X';
+		}
+		else
+		{
+		    i++;
+		}
+		digram.push_back(make_pair(c1, c2));
+	    }
+	    //Making Table
+	    vector<int> present(26,1);
+	    string key_new = "";
+	    for(char c:key)
+	    {
+		if(present[c-'A']==1) key_new +=c;
+		present[c-'A'] = 0;
+	    }
+	    int i=0;
+	    for(;i<(int)key_new.length();i++)
+	    {
+		int x = i/5;
+		int y = i%5;
+		table[x][y] = key_new[i];
+	    }
+	    int j=0;
+	    while(i<25 && j<26)
+	    {
+		if(present[j]==1)
+		{
+		    int x = i/5;
+		    int y = i%5;
+		    if('A'+j=='J'){
+		        j++; continue;
+		    }
+		    table[x][y] = 'A'+j;
+		    i++;
+		    j++;
+		}
+		else j++;
+	    }
+	    cout<<"Printing the Table"<<endl;
+	    for(int i=0;i<5;i++)
+	    {
+		for(int j=0;j<5;j++)
+		    cout<<table[i][j];
+		cout<<endl;
+	    }
+	    string res = "";
+	    for(auto p:digram)
+	    {
+		auto t = decode(p.first, p.second);
+		res+=t.first;
+		res+=t.second;
+	    }
+	    return res;
+	}
+	int main()
+	{
+	    cout<<"Enter Encrypted text"<<endl;
+	    string str;
+	    getline(cin,str);
+	    cout<<"Enter the Key"<<endl;
+	    string key;
+	    cin>>key;
+
+	    cout<<"The Decrypted text is:"<<endl;
+	    cout<<decrypt(str, key)<<endl;
+
+
+	    return 0;
+	}
+

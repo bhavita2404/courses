@@ -1,0 +1,31 @@
+Q.1 List the commands used in the game to reach the first ciphertext.
+
+climb, read, enter
+
+Q.2 What cryptosystem was used in this level?
+
+substitution cipher
+
+Q.3 What tools and observations were used to figure out the cryptosystem? (Explain in less than 100 words)
+
+On observing the frequency of letters in the encrypted text, we can say that the distribution is similar to that of actual letters. First we checked for Caeser cipher and tried for various shifts and later realized that none of the 26 shifts made sense to the words formed, meaning that substitution cipher was used. Noting down all two letter words in encryption, ys and sy are found to be symmetric, with the only possibility of on and no. y is also a single letter, then the possibility is I/a. This contradiction leads to space being a factor creating this abnormality. So miplaced spaes was the outcome. On observing frequency of single letter, Digraphs and Trigraphs, we replace y (most occuring single letter) with e and me (most occuring digraphs) with th. This also corresponds to mey(most occuring trigraphs) mapping to the. mm, kk and aa are the occuring doubles. We try aa with ss and oo as the only doubles with letter having high frequency and found a mapped with s. Observing multiple (th_s) we match it this, wo w is mapped with i. (tit_ti gh) was replaced with (tituti on). ys and ya are the only digraphs in the encrypted text with high freqeuncy and we know that y is e and a is s, this results in ys being er. Filling letters to match the common occuring words and using frequncy analysis and intution, we decrypt the message. Digits shift was found by cosidering all 10 possible ways.
+
+
+Q.4 What is the plaintext space and ciphertext space? What is the mapping between the elements of plaintext space and the elements of ciphertext space? (Explain in less than 100 words)
+
+Plaintext space/Decrypted message:
+irst ch amb eroft hecaves .A syo ucanse e, the rei snot hingo fi nterest in thechamb er .So meofthel ater ch amb erswi llbemore inte re stin gthanthison e!Th ecod euse dfo rthi smes sag eisa simples ub s tituti oncipherinwh ichdig it shave beensh ifte dby8 places. Th e passwor dis tyRgU03d iq qwithoutthe quotes. Thi sisthef
+
+Ciphertext space/Encrypted message:
+wsam ie pjo ysgtm eyipbya .P axg niphay y, mey syw ahgm ewhrg tw hmysyam wh meyiepjo ys .Ag jygtmeyk pmys ie pjo ysavw kkoyjgsy whmy sy amwh rmephmewagh y!Me yigu ynay utg smew ajya apr ywap awjfkya no a mwmnmw ghiwfeyswhve wieuwr wm aepby oyyhae wtmy uox8 fkpiya. Me y fpaavgs uwa mxSrN03u wd dvwmegnmmey dngmya. Mew awameyt
+
+Mapping between elements of Plaintext space (PS) and ciphertext space(CS) :
+
+PS: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+CS: poiuytrew__kjhgfdsamnbv_x_POIUYTREW__KJHGFDSAMNBV_X_4567890123
+
+
+Q.5 What was the final command used to clear this level?
+
+tyRgU69diqq
+
